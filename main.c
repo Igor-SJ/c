@@ -21,7 +21,7 @@ typedef struct {
 int main() {
     Produto *produtos = NULL;
 
-    int n;
+    int n, i;
 
     printf("Quantos produtos voce quer alocar?\n");
     scanf("%d", &n);
@@ -30,8 +30,21 @@ int main() {
 
     printf("Alocacao feita com sucesso!\n");
 
+    for(i = 0; i < n; i++) {
+        printf("Nome do produto %d: \n", i+1);
+        scanf("%s", produtos[i].nome);
+        printf("Descricao do produto %d: \n", i+1);
+        scanf("%s", produtos[i].descricao);
+        printf("Estoque total do produto %d: \n", i+1);
+        scanf("%d", &produtos[i].estoque);
+        printf("Marca do produto %d: \n", i+1);
+        scanf("%s", produtos[i].marca);
+        printf("Peso do produto %d: \n", i+1);
+        scanf("%f", &produtos[i].peso);
+    }
+
     free(produtos);
-    
+
     printf("Memoria liberada com sucesso.\n");
     return 0;
 }
