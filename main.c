@@ -22,6 +22,7 @@ typedef struct {
 void exibir_menu(int *choice_temp);
 int alocar_memoria(Produto **produtos_temp, int *x);
 void alocar_produtos(Produto *produtos_aloc, int j);
+void mostrar_produtos(Produto *produtos_mostrar, int y);
 
 
 int main() {
@@ -38,11 +39,14 @@ int main() {
             case 1:
 
                 alocar_memoria(&produtos, &n);
+                alocar_produtos(produtos, n);
+                break;
 
             case 2:
-                
-                alocar_produtos(produtos, n);
+                mostrar_produtos(produtos, n);
+                break;
 
+                
         }
 
     } while(choice != 0);
@@ -106,5 +110,12 @@ void alocar_produtos(Produto *produtos_aloc, int j) {
         scanf(" %49s", produtos_aloc[i].marca);
         printf("Peso do produto %d: \n", i+1);
         scanf(" %f", &produtos_aloc[i].peso);
+    }
+}
+
+void mostrar_produtos(Produto *produtos_mostrar, int y) {
+    int i;
+    for(i = 0; i < y; i++) {
+        printf("Nome: %s.\n\n", (produtos_mostrar+i)->nome);
     }
 }
