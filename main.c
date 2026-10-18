@@ -26,21 +26,35 @@ int main() {
     printf("Quantos produtos voce quer alocar?\n");
     scanf("%d", &n);
 
-    Produto *temp = realloc(produtos, (n + 1) * sizeof(Produto) );
+    Produto *temp = realloc(produtos, n * sizeof(Produto) );
+
+    if (temp == NULL && n > 0) {
+        printf("Erro na alocacao de memoria.\n");
+        return 1;
+    }
+
+    if (n < 0) {
+        printf("Quantidade invalida.\n");
+        return 1;
+    }
+
+    produtos = temp;
 
     printf("Alocacao feita com sucesso!\n");
 
     for(i = 0; i < n; i++) {
+        printf("Categoria do produto %d: \n", i+1);
+        scanf(" %49s", produtos[i].categoria.nome_cat);
         printf("Nome do produto %d: \n", i+1);
-        scanf("%s", produtos[i].nome);
+        scanf(" %99s", produtos[i].nome);
         printf("Descricao do produto %d: \n", i+1);
-        scanf("%s", produtos[i].descricao);
+        scanf(" %299s", produtos[i].descricao);
         printf("Estoque total do produto %d: \n", i+1);
-        scanf("%d", &produtos[i].estoque);
+        scanf(" %d", &produtos[i].estoque);
         printf("Marca do produto %d: \n", i+1);
-        scanf("%s", produtos[i].marca);
+        scanf(" %49s", produtos[i].marca);
         printf("Peso do produto %d: \n", i+1);
-        scanf("%f", &produtos[i].peso);
+        scanf(" %f", &produtos[i].peso);
     }
 
     free(produtos);
