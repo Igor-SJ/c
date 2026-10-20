@@ -3,9 +3,9 @@
 #include <string.h>
 
 typedef struct {
-    int id_cat;
     char nome_cat[50];
     char descricao_cat[200];
+    int quant_cat;
 } Categoria;
 
 typedef struct {
@@ -24,7 +24,9 @@ void exibir_menu(int *choice_temp);
 int alocar_memoria(Produto **produtos_temp, int *x);
 void alocar_produtos(Produto *produtos_aloc, int *j);
 void mostrar_produtos(Produto *produtos_mostrar, int y);
+//mostrar produto individual (a fazer);
 int buscar_produto(Produto *produtos_buscar, int z, int *confirm_buscar);
+int filtrar_produtos(Produto *produtos_filtrar, int w, int *confirm_filtrar);
 
 
 int main() {
@@ -62,6 +64,23 @@ int main() {
                         printf("Peso: %.2f.\n", (produtos+i)->peso);
                         printf("Local: %s.\n", (produtos+i)->local);
                 }
+                break;
+            case 4: 
+                find_main = filtrar_produtos(produtos, n, &confirm);
+
+                if(confirm == 0) {
+                    for(i = 0; i < n; i++) {
+                        printf("Nome: %s.\n", (produtos+i)->nome);
+                        printf("Categoria: %s.\n", (produtos+i)->categoria.nome_cat);
+                        printf("Descricao: %s.\n", (produtos+i)->descricao);
+                        printf("Estoque: %d.\n", (produtos+i)->estoque);
+                        printf("Marca: %s.\n", (produtos+i)->marca);
+                        printf("Peso: %.2f.\n", (produtos+i)->peso);
+                        printf("Local: %s.\n", (produtos+i)->local);
+                    }
+
+                }
+
         }
 
     } while(choice != 0);
@@ -221,6 +240,81 @@ int buscar_produto(Produto *produtos_buscar, int z, int *confirm_buscar) {
         printf("Nenhum produto encontrado.\n");
         *confirm_buscar = 1;
     }
+}
+
+int filtrar_produtos(Produto *produtos_filtrar, int w, int *confirm_filtrar) {
+    char filtro_buscar[50];
+    int i, count = 0;
+    int find_filtrar, choice = 0;
+
+    printf("Por qual fator você deseja filtrar?\n");
+    printf("[1] - Categoria\n");
+    printf("[2] - Marca\n");
+    printf("[3] - Local\n");
+
+    scanf(" %d", &choice);
+
+    switch(choice) {
+        case 1:
+            printf("Digite a categoria:\n");
+            scanf(" %s", &filtro_buscar);
+
+            for(i = 0; i < w; i++) {
+                if(strcmp((produtos_filtrar+i)->categoria.nome_cat, filtro_buscar) == 0) {
+                    count++;
+                    find_filtrar = i;
+                }
+            }
+            if (count > 1) {
+                printf("Produtos encontrados.\n");
+                *confirm_filtrar = 0;
+                return find_filtrar;
+            }
+            if(count == 0) {
+                printf("Nenhum produto encontrado.\n");
+                *confirm_filtrar = 1;
+            }
+        case 2:
+            printf("Digite a marca:\n");
+            scanf(" %s", &filtro_buscar);
+
+            for(i = 0; i < w; i++) {
+                if(strcmp((produtos_filtrar+i)->marca, filtro_buscar) == 0) {
+                    count++;
+                    find_filtrar = i;
+                }
+            }
+            if (count > 1) {
+                printf("Produtos encontrados.\n");
+                *confirm_filtrar = 0;
+                return find_filtrar;
+            }
+            if(count == 0) {
+                printf("Nenhum produto encontrado.\n");
+                *confirm_filtrar = 1;
+            }
+        case 3:
+            printf("Digite o local:\n");
+            scanf(" %s", &filtro_buscar);
+
+            for(i = 0; i < w; i++) {
+                if(strcmp((produtos_filtrar+i)->local, filtro_buscar) == 0) {
+                    count++;
+                    find_filtrar = i;
+                }
+            }
+            if (count > 1) {
+                printf("Produtos encontrados.\n");
+                *confirm_filtrar = 0;
+                return find_filtrar;
+            }
+            if(count == 0) {
+                printf("Nenhum produto encontrado.\n");
+                *confirm_filtrar = 1;
+            }
+    }
+
+    
 }
 
 
