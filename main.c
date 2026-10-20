@@ -27,6 +27,7 @@ void mostrar_produtos(Produto *produtos_mostrar, int y);
 //mostrar produto individual (a fazer);
 int buscar_produto(Produto *produtos_buscar, int z, int *confirm_buscar);
 int filtrar_produtos(Produto *produtos_filtrar, int w, int *confirm_filtrar);
+void alterar_produtos(Produto **produtos_alterar, int m);
 
 
 int main() {
@@ -78,8 +79,10 @@ int main() {
                         printf("Peso: %.2f.\n", (produtos+i)->peso);
                         printf("Local: %s.\n", (produtos+i)->local);
                     }
-
                 }
+                break;
+            case 5:
+                alterar_produtos(&produtos, n);
 
         }
 
@@ -313,8 +316,28 @@ int filtrar_produtos(Produto *produtos_filtrar, int w, int *confirm_filtrar) {
                 *confirm_filtrar = 1;
             }
     }
+}
 
-    
+void alterar_produtos(Produto **produtos_alterar, int m) {
+    int choice_alterar, j, confirm, i;
+    printf("Qual dado você deseja alterar?\n");
+    printf("[1] - Nome\n");
+    printf("[2] - Categoria\n");
+    printf("[3] - Descricao\n");
+    printf("[4] - Estoque\n"); //falta finalizar esta parte
+    printf("[5] - Marca\n");
+    printf("[6] - Peso\n");
+    printf("[7] - Local\n");
+    scanf(" %d", &choice_alterar);
+
+    printf("De qual produto? (Digite o nome).\n");
+    scanf(" %s", &j);
+
+    i = buscar_produto(*produtos_alterar, m, &confirm);
+
+    printf("Digite o novo nome do produto %d: \n", i);
+    scanf(" %99s", (*produtos_alterar)[i].nome);
+
 }
 
 
