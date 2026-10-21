@@ -33,7 +33,7 @@ void alterar_produtos(Produto **produtos_alterar, int m);
 int main() {
     Produto *produtos = NULL;
 
-    int n = 0, i, choice = 10, choice_ind = 0, confirm = 0, find_main, *find_filtro, alocar_result;
+    int n = 0, i, choice = 10, choice_ind = 0, confirm = 0, find_main, *find_filtro = NULL, alocar_result;
 
     do {
         
@@ -70,7 +70,8 @@ int main() {
                 confirm = 0;
                 break;
             case 4: 
-                find_filtro = filtrar_produtos(produtos, n, &confirm);
+            free(find_filtro);
+            find_filtro = filtrar_produtos(produtos, n, &confirm);
 
                 if(confirm == 0) {
                     for(i = 0; i < n; i++) {
@@ -255,78 +256,87 @@ int buscar_produto(Produto *produtos_buscar, int z, int *confirm_buscar) {
 
 int *filtrar_produtos(Produto *produtos_filtrar, int w, int *confirm_filtrar) {
     char filtro_buscar[50];
-    int i, count = 0;
-    int *find_filtrar, choice_filtro = 0;
+    int i, choice_filtro = 0;
 
-    printf("Por qual fator você deseja filtrar?\n");
+    *confirm_filtrar = 1;
+
+    if (w <= 0 || produtos_filtrar == NULL) {
+        printf("Nenhum produto cadastrado.\n");
+        return NULL; //colocar mais coisas como essa em outras funções
+    }
+
+    int *find_filtrar = calloc((size_t)w, sizeof(int));
+
+    if (find_filtrar == NULL) {
+        printf("Erro na alocacao de memoria.\n");
+        return NULL;
+    }
+
+    printf("Por qual fator voce deseja filtrar?\n");
     printf("[1] - Categoria\n");
     printf("[2] - Marca\n");
     printf("[3] - Local\n");
 
-    scanf(" %d", &choice_filtro);
+    if (scanf("%d", &choice_filtro) != 1 ||
+        choice_filtro < 1 || choice_filtro > 3) {
+        printf("Opcao invalida.\n");
+        free(find_filtrar);
+        return NULL;
+    }
 
-    switch(choice_filtro) {
+    switch (choice_filtro) {
         case 1:
             printf("Digite a categoria:\n");
-            scanf(" %s", &filtro_buscar);
-
-            for(i = 0; i < w; i++) {
-                if(strcmp((produtos_filtrar+i)->categoria.nome_cat, filtro_buscar) == 0) {
-                    count++;
-                    *(find_filtrar+i) = i;
-                }
-            }
-            if (count >= 1) {
-                printf("Produtos encontrados.\n");
-                *confirm_filtrar = 0;
-                return find_filtrar;
-            }
-            if(count == 0) {
-                printf("Nenhum produto encontrado.\n");
-                *confirm_filtrar = 1;
-            }
             break;
         case 2:
             printf("Digite a marca:\n");
-            scanf(" %s", &filtro_buscar);
-
-            for(i = 0; i < w; i++) {
-                if(strcmp((produtos_filtrar+i)->marca, filtro_buscar) == 0) {
-                    count++;
-                    find_filtrar = i;
-                }
-            }
-            if (count > 1) {
-                printf("Produtos encontrados.\n");
-                *confirm_filtrar = 0;
-                return find_filtrar;
-            }
-            if(count == 0) {
-                printf("Nenhum produto encontrado.\n");
-                *confirm_filtrar = 1;
-            }
             break;
         case 3:
             printf("Digite o local:\n");
-            scanf(" %s", &filtro_buscar);
-
-            for(i = 0; i < w; i++) {
-                if(strcmp((produtos_filtrar+i)->local, filtro_buscar) == 0) {
-                    count++;
-                    find_filtrar = i;
-                }
-            }
-            if (count > 1) {
-                printf("Produtos encontrados.\n");
-                *confirm_filtrar = 0;
-                return find_filtrar;
-            }
-            if(count == 0) {
-                printf("Nenhum produto encontrado.\n");
-                *confirm_filtrar = 1;
-            }
             break;
     }
+
+    if (scanf("%49s", filtro_buscar) != 1) {
+        free(find_filtrar);
+        return NULL;
+    }
+
+    for (i = 0; i < w; i++) {
+        int corresponde = 0;
+
+        switch (choice_filtro) {
+            case 1:
+                corresponde =
+                    strcmp(produtos_filtrar[i].categoria.nome_cat,
+                           filtro_buscar) == 0;
+                break;
+
+            case 2:
+                corresponde =
+                    strcmp(produtos_filtrar[i].marca,
+                           filtro_buscar) == 0;
+                break;
+
+            case 3:
+                corresponde =
+                    strcmp(produtos_filtrar[i].local,
+                           filtro_buscar) == 0;
+                break;
+        }
+
+        if (corresponde) {
+            find_filtrar[i] = 1;
+            *confirm_filtrar = 0;
+        }
+    }
+
+    if (*confirm_filtrar == 0) {
+        printf("Produtos encontrados.\n");
+    } else {
+        printf("Nenhum produto encontrado.\n");
+    }
+
+    return find_filtrar;
 }
 
 void alterar_produtos(Produto **produtos_alterar, int m) {
