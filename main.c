@@ -21,19 +21,19 @@ typedef struct {
 } Produto;
 
 void exibir_menu(int *choice_temp);
-int alocar_memoria(Produto **produtos_temp, int *x);
+int alocar_memoria(Produto **produtos_temp, int *x, int **encontrar_filtro);
 void alocar_produtos(Produto *produtos_aloc, int *j);
 void mostrar_produtos(Produto *produtos_mostrar, int y);
 //mostrar produto individual (a fazer);
 int buscar_produto(Produto *produtos_buscar, int z, int *confirm_buscar);
-int filtrar_produtos(Produto *produtos_filtrar, int w, int *confirm_filtrar);
+int *filtrar_produtos(Produto *produtos_filtrar, int w, int *confirm_filtrar);
 void alterar_produtos(Produto **produtos_alterar, int m);
 
 
 int main() {
     Produto *produtos = NULL;
 
-    int n = 0, i, choice = 10, choice_ind = 0, confirm = 0, find_main;
+    int n = 0, i, choice = 10, choice_ind = 0, confirm = 0, find_main, *find_filtro, alocar_result;
 
     do {
         
@@ -42,11 +42,13 @@ int main() {
         switch(choice) {
 
             case 1:
+            alocar_result = alocar_memoria(&produtos, &n, &find_filtro);
 
-                alocar_memoria(&produtos, &n);
-               
-                alocar_produtos(produtos, &n);
-                
+            if(alocar_result == 1) {
+                printf("Entrou aqui");
+                return 1;
+            }
+            alocar_produtos(produtos, &n);
                 break;
 
             case 2:
@@ -65,21 +67,25 @@ int main() {
                         printf("Peso: %.2f.\n", (produtos+i)->peso);
                         printf("Local: %s.\n", (produtos+i)->local);
                 }
+                confirm = 0;
                 break;
             case 4: 
-                find_main = filtrar_produtos(produtos, n, &confirm);
+                find_filtro = filtrar_produtos(produtos, n, &confirm);
 
                 if(confirm == 0) {
                     for(i = 0; i < n; i++) {
-                        printf("Nome: %s.\n", (produtos+i)->nome);
-                        printf("Categoria: %s.\n", (produtos+i)->categoria.nome_cat);
-                        printf("Descricao: %s.\n", (produtos+i)->descricao);
-                        printf("Estoque: %d.\n", (produtos+i)->estoque);
-                        printf("Marca: %s.\n", (produtos+i)->marca);
-                        printf("Peso: %.2f.\n", (produtos+i)->peso);
-                        printf("Local: %s.\n", (produtos+i)->local);
+                        if(find_filtro[i] != 0) {
+                            printf("Nome: %s.\n", (produtos+i)->nome);
+                            printf("Categoria: %s.\n", (produtos+i)->categoria.nome_cat);
+                            printf("Descricao: %s.\n", (produtos+i)->descricao);
+                            printf("Estoque: %d.\n", (produtos+i)->estoque);
+                            printf("Marca: %s.\n", (produtos+i)->marca);
+                            printf("Peso: %.2f.\n", (produtos+i)->peso);
+                            printf("Local: %s.\n", (produtos+i)->local);
+                        }
                     }
                 }
+                confirm = 0;
                 break;
             case 5:
                 alterar_produtos(&produtos, n);
@@ -89,6 +95,7 @@ int main() {
     } while(choice != 0);
 
     free(produtos);
+    free(find_filtro);
 
     printf("Memoria liberada com sucesso.\n");
 
@@ -109,12 +116,13 @@ void exibir_menu(int *choice_temp) {
     scanf(" %d", choice_temp);
 }
 
-int alocar_memoria(Produto **produtos_temp, int *x) {
+int alocar_memoria(Produto **produtos_temp, int *x, int **encontrar_filtro) {
 
     printf("Quantos produtos voce quer alocar?\n");
     scanf(" %d", x);
 
     Produto *temp = realloc(*produtos_temp,(size_t) *x * sizeof(Produto));
+    int *temp2 = realloc(*encontrar_filtro,(size_t) *x * sizeof(int));
 
     if (temp == NULL && *x > 0) {
         printf("Erro na alocacao de memoria.\n");
@@ -149,7 +157,7 @@ void alocar_produtos(Produto *produtos_aloc, int *j) {
         printf("Peso do produto %d: \n", i+1);
         scanf(" %f", &produtos_aloc[i].peso);
         printf("Local do produto %d: \n", i+1);
-        scanf(" %s", produtos_aloc[i].local);
+        scanf(" %49s", produtos_aloc[i].local);
     }
 }
 
@@ -200,7 +208,7 @@ void mostrar_produtos(Produto *produtos_mostrar, int y) {
         case 6:
             for(i = 0; i < y; i++) {
                 printf("Nome: %s.\n", (produtos_mostrar+i)->nome);
-                printf("Peso: %s.\n", (produtos_mostrar+i)->local);
+                printf("Local: %s.\n", (produtos_mostrar+i)->local);
             }
             break;     
         case 0:
@@ -245,19 +253,19 @@ int buscar_produto(Produto *produtos_buscar, int z, int *confirm_buscar) {
     }
 }
 
-int filtrar_produtos(Produto *produtos_filtrar, int w, int *confirm_filtrar) {
+int *filtrar_produtos(Produto *produtos_filtrar, int w, int *confirm_filtrar) {
     char filtro_buscar[50];
     int i, count = 0;
-    int find_filtrar, choice = 0;
+    int *find_filtrar, choice_filtro = 0;
 
     printf("Por qual fator você deseja filtrar?\n");
     printf("[1] - Categoria\n");
     printf("[2] - Marca\n");
     printf("[3] - Local\n");
 
-    scanf(" %d", &choice);
+    scanf(" %d", &choice_filtro);
 
-    switch(choice) {
+    switch(choice_filtro) {
         case 1:
             printf("Digite a categoria:\n");
             scanf(" %s", &filtro_buscar);
@@ -265,10 +273,10 @@ int filtrar_produtos(Produto *produtos_filtrar, int w, int *confirm_filtrar) {
             for(i = 0; i < w; i++) {
                 if(strcmp((produtos_filtrar+i)->categoria.nome_cat, filtro_buscar) == 0) {
                     count++;
-                    find_filtrar = i;
+                    *(find_filtrar+i) = i;
                 }
             }
-            if (count > 1) {
+            if (count >= 1) {
                 printf("Produtos encontrados.\n");
                 *confirm_filtrar = 0;
                 return find_filtrar;
@@ -277,6 +285,7 @@ int filtrar_produtos(Produto *produtos_filtrar, int w, int *confirm_filtrar) {
                 printf("Nenhum produto encontrado.\n");
                 *confirm_filtrar = 1;
             }
+            break;
         case 2:
             printf("Digite a marca:\n");
             scanf(" %s", &filtro_buscar);
@@ -296,6 +305,7 @@ int filtrar_produtos(Produto *produtos_filtrar, int w, int *confirm_filtrar) {
                 printf("Nenhum produto encontrado.\n");
                 *confirm_filtrar = 1;
             }
+            break;
         case 3:
             printf("Digite o local:\n");
             scanf(" %s", &filtro_buscar);
@@ -315,6 +325,7 @@ int filtrar_produtos(Produto *produtos_filtrar, int w, int *confirm_filtrar) {
                 printf("Nenhum produto encontrado.\n");
                 *confirm_filtrar = 1;
             }
+            break;
     }
 }
 
