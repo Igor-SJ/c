@@ -24,10 +24,10 @@ void exibir_menu(int *choice_temp);
 int alocar_memoria(Produto **produtos_temp, int *x, int **encontrar_filtro);
 void alocar_produtos(Produto *produtos_aloc, int *j);
 void mostrar_produtos(Produto *produtos_mostrar, int y);
-//mostrar produto individual (a fazer);
 int buscar_produto(Produto *produtos_buscar, int z, int *confirm_buscar);
 int *filtrar_produtos(Produto *produtos_filtrar, int w, int *confirm_filtrar);
 void alterar_produtos(Produto **produtos_alterar, int m);
+void print_tudo(Produto *produtos_print, int p); //
 
 
 int main() {
@@ -45,7 +45,6 @@ int main() {
             alocar_result = alocar_memoria(&produtos, &n, &find_filtro);
 
             if(alocar_result == 1) {
-                printf("Entrou aqui");
                 return 1;
             }
             alocar_produtos(produtos, &n);
@@ -58,33 +57,21 @@ int main() {
             case 3:
                 find_main = buscar_produto(produtos, n, &confirm);
                 if(confirm == 0) {
-                    i = find_main;
-                        printf("Nome: %s.\n", (produtos+i)->nome);
-                        printf("Categoria: %s.\n", (produtos+i)->categoria.nome_cat);
-                        printf("Descricao: %s.\n", (produtos+i)->descricao);
-                        printf("Estoque: %d.\n", (produtos+i)->estoque);
-                        printf("Marca: %s.\n", (produtos+i)->marca);
-                        printf("Peso: %.2f.\n", (produtos+i)->peso);
-                        printf("Local: %s.\n", (produtos+i)->local);
+                    int find_main_print = find_main;
+                        print_tudo(produtos, find_main_print); 
                 }
                 confirm = 0;
                 break;
             case 4: 
             free(find_filtro);
             find_filtro = filtrar_produtos(produtos, n, &confirm);
+            int find_filtro_print = *find_filtro;
 
                 if(confirm == 0) {
                     for(i = 0; i < n; i++) {
-                        if(find_filtro[i] != 0) {
-                            printf("Nome: %s.\n", (produtos+i)->nome);
-                            printf("Categoria: %s.\n", (produtos+i)->categoria.nome_cat);
-                            printf("Descricao: %s.\n", (produtos+i)->descricao);
-                            printf("Estoque: %d.\n", (produtos+i)->estoque);
-                            printf("Marca: %s.\n", (produtos+i)->marca);
-                            printf("Peso: %.2f.\n", (produtos+i)->peso);
-                            printf("Local: %s.\n", (produtos+i)->local);
-                        }
-                    }
+                        if(find_filtro[i] != 0)
+                            print_tudo(produtos, i); 
+                    }       
                 }
                 confirm = 0;
                 break;
@@ -215,13 +202,7 @@ void mostrar_produtos(Produto *produtos_mostrar, int y) {
             break;     
         case 0:
             for(i = 0; i < y; i++) {
-                printf("Nome: %s.\n", (produtos_mostrar+i)->nome);
-                printf("Categoria: %s.\n", (produtos_mostrar+i)->categoria.nome_cat);
-                printf("Descricao: %s.\n", (produtos_mostrar+i)->descricao);
-                printf("Estoque: %d.\n", (produtos_mostrar+i)->estoque);
-                printf("Marca: %s.\n", (produtos_mostrar+i)->marca);
-                printf("Peso: %.2f.\n", (produtos_mostrar+i)->peso);
-                printf("Local: %s.\n", (produtos_mostrar+i)->local);
+                print_tudo(produtos_mostrar, i); 
             }
             break;  
     }
@@ -560,8 +541,16 @@ void alterar_produtos(Produto **produtos_alterar, int m) {
             break;
             
         }
-    
+}
 
+void print_tudo(Produto *produtos_print, int p) { 
+        printf("Nome: %s.\n", (produtos_print+p)->nome);
+        printf("Categoria: %s.\n", (produtos_print+p)->categoria.nome_cat);
+        printf("Descricao: %s.\n", (produtos_print+p)->descricao);
+        printf("Estoque: %d.\n", (produtos_print+p)->estoque);
+        printf("Marca: %s.\n", (produtos_print+p)->marca);
+        printf("Peso: %.2f.\n", (produtos_print+p)->peso);
+        printf("Local: %s.\n", (produtos_print+p)->local);
 }
 
 
