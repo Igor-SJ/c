@@ -5,7 +5,6 @@
 typedef struct {
     char nome_cat[50];
     char descricao_cat[200];
-    int quant_cat;
 } Categoria;
 
 typedef struct {
@@ -30,11 +29,14 @@ void alterar_produtos(Produto **produtos_alterar, int m);
 void print_tudo(Produto *produtos_print, int p); //
 void find_verificar(Produto *protudo_verificar, int *confirm_verificar, int count_verificar);
 
+FILE* fptr;
 
 int main() {
     Produto *produtos = NULL;
 
     int n = 0, i, choice = 10, choice_ind = 0, confirm = 0, find_main, *find_filtro = NULL, alocar_result;
+
+    fptr = fopen("produtos.txt", "w");
 
     do {
         
@@ -85,6 +87,7 @@ int main() {
 
     free(produtos);
     free(find_filtro);
+    fclose(fptr);
 
     printf("Memoria liberada com sucesso.\n");
 
@@ -134,18 +137,31 @@ void alocar_produtos(Produto *produtos_aloc, int *j) {
     for(i = 0; i < *j; i++) {
         printf("Categoria do produto %d: \n", i+1);
         scanf(" %49s", produtos_aloc[i].categoria.nome_cat);
+        fputs(produtos_aloc[i].categoria.nome_cat, fptr); fputs("\n", fptr);
+
         printf("Nome do produto %d: \n", i+1);
         scanf(" %99s", produtos_aloc[i].nome);
+        fputs(produtos_aloc[i].nome, fptr); fputs("\n", fptr);
+
         printf("Descricao do produto %d: \n", i+1);
         scanf(" %299s", produtos_aloc[i].descricao);
+        fputs(produtos_aloc[i].descricao, fptr); fputs("\n", fptr);
+
         printf("Estoque total do produto %d: \n", i+1);
         scanf(" %d", &produtos_aloc[i].estoque);
+
         printf("Marca do produto %d: \n", i+1);
         scanf(" %49s", produtos_aloc[i].marca);
+        fputs(produtos_aloc[i].marca, fptr); fputs("\n", fptr);
+
         printf("Peso do produto %d: \n", i+1);
         scanf(" %f", &produtos_aloc[i].peso);
+
+
         printf("Local do produto %d: \n", i+1);
         scanf(" %49s", produtos_aloc[i].local);
+        fputs(produtos_aloc[i].local, fptr); fputs("\n", fptr);
+
     }
 }
 
