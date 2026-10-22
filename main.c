@@ -91,6 +91,8 @@ int main() {
             case 5:
                 alterar_produtos(&produtos, n);
 
+                break;
+
         }
 
     } while(choice != 0);
@@ -112,7 +114,6 @@ void exibir_menu(int *choice_temp) {
     printf("[3] - Buscar.\n"); //eventualmente, posso juntar 1 com 2, e 3 com 4, ou mais
     printf("[4] - Filtrar.\n");
     printf("[5] - Alterar dados individuais.\n");
-    printf("[6] - Exibir informacoes de local.\n");
     printf("[0] - Sair.\n\n");
     scanf(" %d", choice_temp);
 }
@@ -340,7 +341,8 @@ int *filtrar_produtos(Produto *produtos_filtrar, int w, int *confirm_filtrar) {
 }
 
 void alterar_produtos(Produto **produtos_alterar, int m) {
-    int choice_alterar, j, confirm, i;
+    int choice_alterar, confirm_alterar, i, count_alterar = 0, find_alterar;
+    char j[50];
     printf("Qual dado você deseja alterar?\n");
     printf("[1] - Nome\n");
     printf("[2] - Categoria\n");
@@ -351,13 +353,214 @@ void alterar_produtos(Produto **produtos_alterar, int m) {
     printf("[7] - Local\n");
     scanf(" %d", &choice_alterar);
 
-    printf("De qual produto? (Digite o nome).\n");
-    scanf(" %s", &j);
+    switch(choice_alterar) {
+       
+        case 1:
+            printf("De qual produto? (Digite o nome).\n");
+            scanf(" %s", &j);
 
-    i = buscar_produto(*produtos_alterar, m, &confirm);
+            for(i = 0; i < m; i++) {
+                if(strcmp((*produtos_alterar+i)->nome, j) == 0) {
+                    count_alterar++;
+                    strcpy(j, (*produtos_alterar+i)->nome);
+                    find_alterar = i;
+                }
+            }
+            if (count_alterar == 1) {
+                printf("Produto encontrado.\n");
+                confirm_alterar = 0;
+            }
+            if(count_alterar > 1) {
+                printf("Mais que um produto com este nome.\n");
+                confirm_alterar = 1;
+            }
+            if(count_alterar == 0) {
+                printf("Nenhum produto encontrado.\n");
+                confirm_alterar = 1;
+            }
 
-    printf("Digite o novo nome do produto %d: \n", i);
-    scanf(" %99s", (*produtos_alterar)[i].nome);
+            if(confirm_alterar == 0) {
+                printf("Digite o novo nome do produto: \n");
+                scanf(" %99s", (*produtos_alterar+find_alterar)->nome);
+            }
+            break;
+        case 2:
+            printf("De qual produto? (Digite o nome).\n");
+            scanf(" %s", &j);
+
+            for(i = 0; i < m; i++) {
+                if(strcmp((*produtos_alterar+i)->nome, j) == 0) {
+                    count_alterar++;
+                    strcpy(j, (*produtos_alterar+i)->nome);
+                    find_alterar = i;
+                }
+            }
+            if (count_alterar == 1) {
+                printf("Produto encontrado.\n");
+                confirm_alterar = 0;
+            }
+            if(count_alterar > 1) {
+                printf("Mais que um produto com este nome.\n");
+                confirm_alterar = 1;
+            }
+            if(count_alterar == 0) {
+                printf("Nenhum produto encontrado.\n");
+                confirm_alterar = 1;
+            }
+
+            if(confirm_alterar == 0) {
+                printf("Digite a nova categoria do produto: \n");
+                scanf(" %99s", (*produtos_alterar+find_alterar)->categoria);
+            }
+            break;
+        case 3: 
+            printf("De qual produto? (Digite o nome).\n");
+            scanf(" %s", &j);
+
+            for(i = 0; i < m; i++) {
+                if(strcmp((*produtos_alterar+i)->nome, j) == 0) {
+                    count_alterar++;
+                    strcpy(j, (*produtos_alterar+i)->nome);
+                    find_alterar = i;
+                }
+            }
+            if (count_alterar == 1) {
+                printf("Produto encontrado.\n");
+                confirm_alterar = 0;
+            }
+            if(count_alterar > 1) {
+                printf("Mais que um produto com este nome.\n");
+                confirm_alterar = 1;
+            }
+            if(count_alterar == 0) {
+                printf("Nenhum produto encontrado.\n");
+                confirm_alterar = 1;
+            }
+
+            if(confirm_alterar == 0) {
+                printf("Digite a nova descricao do produto: \n");
+                scanf(" %99s", (*produtos_alterar+find_alterar)->descricao);
+            }
+            break;
+        case 4:
+            printf("De qual produto? (Digite o nome).\n");
+            scanf(" %s", &j);
+
+            for(i = 0; i < m; i++) {
+                if(strcmp((*produtos_alterar+i)->nome, j) == 0) {
+                    count_alterar++;
+                    strcpy(j, (*produtos_alterar+i)->nome);
+                    find_alterar = i;
+                }
+            }
+            if (count_alterar == 1) {
+                printf("Produto encontrado.\n");
+                confirm_alterar = 0;
+            }
+            if(count_alterar > 1) {
+                printf("Mais que um produto com este nome.\n");
+                confirm_alterar = 1;
+            }
+            if(count_alterar == 0) {
+                printf("Nenhum produto encontrado.\n");
+                confirm_alterar = 1;
+            }
+
+            if(confirm_alterar == 0) {
+                printf("Digite o novo estoque do produto: \n");
+                scanf(" %99s", (*produtos_alterar+find_alterar)->estoque);
+            }
+            break;
+        case 5:
+            printf("De qual produto? (Digite o nome).\n");
+            scanf(" %s", &j);
+
+            for(i = 0; i < m; i++) {
+                if(strcmp((*produtos_alterar+i)->nome, j) == 0) {
+                    count_alterar++;
+                    strcpy(j, (*produtos_alterar+i)->nome);
+                    find_alterar = i;
+                }
+            }
+            if (count_alterar == 1) {
+                printf("Produto encontrado.\n");
+                confirm_alterar = 0;
+            }
+            if(count_alterar > 1) {
+                printf("Mais que um produto com este nome.\n");
+                confirm_alterar = 1;
+            }
+            if(count_alterar == 0) {
+                printf("Nenhum produto encontrado.\n");
+                confirm_alterar = 1;
+            }
+
+            if(confirm_alterar == 0) {
+                printf("Digite a nova marca do produto: \n");
+                scanf(" %99s", (*produtos_alterar+find_alterar)->marca);
+            }
+            break;
+        case 6:
+            printf("De qual produto? (Digite o nome).\n");
+            scanf(" %s", &j);
+
+            for(i = 0; i < m; i++) {
+                if(strcmp((*produtos_alterar+i)->nome, j) == 0) {
+                    count_alterar++;
+                    strcpy(j, (*produtos_alterar+i)->nome);
+                    find_alterar = i;
+                }
+            }
+            if (count_alterar == 1) {
+                printf("Produto encontrado.\n");
+                confirm_alterar = 0;
+            }
+            if(count_alterar > 1) {
+                printf("Mais que um produto com este nome.\n");
+                confirm_alterar = 1;
+            }
+            if(count_alterar == 0) {
+                printf("Nenhum produto encontrado.\n");
+                confirm_alterar = 1;
+            }
+
+            if(confirm_alterar == 0) {
+                printf("Digite o novo peso do produto: \n");
+                scanf(" %99s", (*produtos_alterar+find_alterar)->peso);
+            }
+            break;
+        case 7:
+            printf("De qual produto? (Digite o nome).\n");
+            scanf(" %s", &j);
+
+            for(i = 0; i < m; i++) {
+                if(strcmp((*produtos_alterar+i)->nome, j) == 0) {
+                    count_alterar++;
+                    strcpy(j, (*produtos_alterar+i)->nome);
+                    find_alterar = i;
+                }
+            }
+            if (count_alterar == 1) {
+                printf("Produto encontrado.\n");
+                confirm_alterar = 0;
+            }
+            if(count_alterar > 1) {
+                printf("Mais que um produto com este nome.\n");
+                confirm_alterar = 1;
+            }
+            if(count_alterar == 0) {
+                printf("Nenhum produto encontrado.\n");
+                confirm_alterar = 1;
+            }
+
+            if(confirm_alterar == 0) {
+                printf("Digite o novo local do produto: \n");
+                scanf(" %99s", (*produtos_alterar+find_alterar)->local);
+            }
+            break;
+            
+        }
+    
 
 }
 
