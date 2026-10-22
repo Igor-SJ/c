@@ -28,6 +28,7 @@ int buscar_produto(Produto *produtos_buscar, int z, int *confirm_buscar);
 int *filtrar_produtos(Produto *produtos_filtrar, int w, int *confirm_filtrar);
 void alterar_produtos(Produto **produtos_alterar, int m);
 void print_tudo(Produto *produtos_print, int p); //
+void find_verificar(Produto *protudo_verificar, int *confirm_verificar, int count_verificar);
 
 
 int main() {
@@ -42,12 +43,12 @@ int main() {
         switch(choice) {
 
             case 1:
-            alocar_result = alocar_memoria(&produtos, &n, &find_filtro);
+                alocar_result = alocar_memoria(&produtos, &n, &find_filtro);
 
-            if(alocar_result == 1) {
-                return 1;
-            }
-            alocar_produtos(produtos, &n);
+                if(alocar_result == 1) {
+                    return 1;
+                }
+                alocar_produtos(produtos, &n);
                 break;
 
             case 2:
@@ -63,9 +64,9 @@ int main() {
                 confirm = 0;
                 break;
             case 4: 
-            free(find_filtro);
-            find_filtro = filtrar_produtos(produtos, n, &confirm);
-            int find_filtro_print = *find_filtro;
+                free(find_filtro);
+                find_filtro = filtrar_produtos(produtos, n, &confirm);
+                int find_filtro_print = *find_filtro;
 
                 if(confirm == 0) {
                     for(i = 0; i < n; i++) {
@@ -77,9 +78,7 @@ int main() {
                 break;
             case 5:
                 alterar_produtos(&produtos, n);
-
                 break;
-
         }
 
     } while(choice != 0);
@@ -205,6 +204,8 @@ void mostrar_produtos(Produto *produtos_mostrar, int y) {
                 print_tudo(produtos_mostrar, i); 
             }
             break;  
+        default:
+            printf("Opcao invalida!\n");
     }
 }
 
@@ -221,19 +222,9 @@ int buscar_produto(Produto *produtos_buscar, int z, int *confirm_buscar) {
             find_buscar = i;
         }
     }
-    if (count == 1) {
-        printf("Produto encontrado.\n");
-        *confirm_buscar = 0;
-        return find_buscar;
-    }
-    if(count > 1) {
-        printf("Mais que um produto com este nome. Tente novamente por filtragem.\n");
-        *confirm_buscar = 1;
-    }
-    if(count == 0) {
-        printf("Nenhum produto encontrado.\n");
-        *confirm_buscar = 1;
-    }
+    find_verificar(produtos_buscar, confirm_buscar, count);
+
+    return find_buscar;
 }
 
 int *filtrar_produtos(Produto *produtos_filtrar, int w, int *confirm_filtrar) {
@@ -288,21 +279,15 @@ int *filtrar_produtos(Produto *produtos_filtrar, int w, int *confirm_filtrar) {
 
         switch (choice_filtro) {
             case 1:
-                corresponde =
-                    strcmp(produtos_filtrar[i].categoria.nome_cat,
-                           filtro_buscar) == 0;
+                corresponde = strcmp(produtos_filtrar[i].categoria.nome_cat, filtro_buscar) == 0;
                 break;
 
             case 2:
-                corresponde =
-                    strcmp(produtos_filtrar[i].marca,
-                           filtro_buscar) == 0;
+                corresponde = strcmp(produtos_filtrar[i].marca, filtro_buscar) == 0;
                 break;
 
             case 3:
-                corresponde =
-                    strcmp(produtos_filtrar[i].local,
-                           filtro_buscar) == 0;
+                corresponde = strcmp(produtos_filtrar[i].local, filtro_buscar) == 0;
                 break;
         }
 
@@ -312,11 +297,10 @@ int *filtrar_produtos(Produto *produtos_filtrar, int w, int *confirm_filtrar) {
         }
     }
 
-    if (*confirm_filtrar == 0) {
+    if (*confirm_filtrar == 0) 
         printf("Produtos encontrados.\n");
-    } else {
+     else 
         printf("Nenhum produto encontrado.\n");
-    }
 
     return find_filtrar;
 }
@@ -347,18 +331,8 @@ void alterar_produtos(Produto **produtos_alterar, int m) {
                     find_alterar = i;
                 }
             }
-            if (count_alterar == 1) {
-                printf("Produto encontrado.\n");
-                confirm_alterar = 0;
-            }
-            if(count_alterar > 1) {
-                printf("Mais que um produto com este nome.\n");
-                confirm_alterar = 1;
-            }
-            if(count_alterar == 0) {
-                printf("Nenhum produto encontrado.\n");
-                confirm_alterar = 1;
-            }
+            
+            find_verificar(*produtos_alterar, &confirm_alterar, count_alterar);
 
             if(confirm_alterar == 0) {
                 printf("Digite o novo nome do produto: \n");
@@ -376,22 +350,12 @@ void alterar_produtos(Produto **produtos_alterar, int m) {
                     find_alterar = i;
                 }
             }
-            if (count_alterar == 1) {
-                printf("Produto encontrado.\n");
-                confirm_alterar = 0;
-            }
-            if(count_alterar > 1) {
-                printf("Mais que um produto com este nome.\n");
-                confirm_alterar = 1;
-            }
-            if(count_alterar == 0) {
-                printf("Nenhum produto encontrado.\n");
-                confirm_alterar = 1;
-            }
+
+            find_verificar(*produtos_alterar, &confirm_alterar, count_alterar);
 
             if(confirm_alterar == 0) {
                 printf("Digite a nova categoria do produto: \n");
-                scanf(" %99s", (*produtos_alterar+find_alterar)->categoria);
+                scanf(" %99s", (*produtos_alterar+find_alterar)->categoria.nome_cat);
             }
             break;
         case 3: 
@@ -405,18 +369,8 @@ void alterar_produtos(Produto **produtos_alterar, int m) {
                     find_alterar = i;
                 }
             }
-            if (count_alterar == 1) {
-                printf("Produto encontrado.\n");
-                confirm_alterar = 0;
-            }
-            if(count_alterar > 1) {
-                printf("Mais que um produto com este nome.\n");
-                confirm_alterar = 1;
-            }
-            if(count_alterar == 0) {
-                printf("Nenhum produto encontrado.\n");
-                confirm_alterar = 1;
-            }
+            
+            find_verificar(*produtos_alterar, &confirm_alterar, count_alterar);
 
             if(confirm_alterar == 0) {
                 printf("Digite a nova descricao do produto: \n");
@@ -434,22 +388,12 @@ void alterar_produtos(Produto **produtos_alterar, int m) {
                     find_alterar = i;
                 }
             }
-            if (count_alterar == 1) {
-                printf("Produto encontrado.\n");
-                confirm_alterar = 0;
-            }
-            if(count_alterar > 1) {
-                printf("Mais que um produto com este nome.\n");
-                confirm_alterar = 1;
-            }
-            if(count_alterar == 0) {
-                printf("Nenhum produto encontrado.\n");
-                confirm_alterar = 1;
-            }
+
+            find_verificar(*produtos_alterar, &confirm_alterar, count_alterar);
 
             if(confirm_alterar == 0) {
                 printf("Digite o novo estoque do produto: \n");
-                scanf(" %99s", (*produtos_alterar+find_alterar)->estoque);
+                scanf(" %d", &(*produtos_alterar+find_alterar)->estoque);
             }
             break;
         case 5:
@@ -463,18 +407,8 @@ void alterar_produtos(Produto **produtos_alterar, int m) {
                     find_alterar = i;
                 }
             }
-            if (count_alterar == 1) {
-                printf("Produto encontrado.\n");
-                confirm_alterar = 0;
-            }
-            if(count_alterar > 1) {
-                printf("Mais que um produto com este nome.\n");
-                confirm_alterar = 1;
-            }
-            if(count_alterar == 0) {
-                printf("Nenhum produto encontrado.\n");
-                confirm_alterar = 1;
-            }
+
+            find_verificar(*produtos_alterar, &confirm_alterar, count_alterar);
 
             if(confirm_alterar == 0) {
                 printf("Digite a nova marca do produto: \n");
@@ -492,22 +426,12 @@ void alterar_produtos(Produto **produtos_alterar, int m) {
                     find_alterar = i;
                 }
             }
-            if (count_alterar == 1) {
-                printf("Produto encontrado.\n");
-                confirm_alterar = 0;
-            }
-            if(count_alterar > 1) {
-                printf("Mais que um produto com este nome.\n");
-                confirm_alterar = 1;
-            }
-            if(count_alterar == 0) {
-                printf("Nenhum produto encontrado.\n");
-                confirm_alterar = 1;
-            }
+
+            find_verificar(*produtos_alterar, &confirm_alterar, count_alterar);
 
             if(confirm_alterar == 0) {
                 printf("Digite o novo peso do produto: \n");
-                scanf(" %99s", (*produtos_alterar+find_alterar)->peso);
+                scanf(" %f", &(*produtos_alterar+find_alterar)->peso);
             }
             break;
         case 7:
@@ -521,18 +445,8 @@ void alterar_produtos(Produto **produtos_alterar, int m) {
                     find_alterar = i;
                 }
             }
-            if (count_alterar == 1) {
-                printf("Produto encontrado.\n");
-                confirm_alterar = 0;
-            }
-            if(count_alterar > 1) {
-                printf("Mais que um produto com este nome.\n");
-                confirm_alterar = 1;
-            }
-            if(count_alterar == 0) {
-                printf("Nenhum produto encontrado.\n");
-                confirm_alterar = 1;
-            }
+
+            find_verificar(*produtos_alterar, &confirm_alterar, count_alterar);
 
             if(confirm_alterar == 0) {
                 printf("Digite o novo local do produto: \n");
@@ -551,6 +465,21 @@ void print_tudo(Produto *produtos_print, int p) {
         printf("Marca: %s.\n", (produtos_print+p)->marca);
         printf("Peso: %.2f.\n", (produtos_print+p)->peso);
         printf("Local: %s.\n", (produtos_print+p)->local);
+}
+
+void find_verificar(Produto *protudo_verificar, int *confirm_verificar, int count_verificar) {
+    if (count_verificar == 1) {
+        printf("Produto encontrado.\n");
+        *confirm_verificar = 0;
+    }
+    if(count_verificar > 1) {
+        printf("Mais que um produto com este nome.\n");
+        *confirm_verificar = 1;
+    }
+    if(count_verificar == 0) {
+        printf("Nenhum produto encontrado.\n");
+        *confirm_verificar = 1;
+    }
 }
 
 
