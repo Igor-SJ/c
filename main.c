@@ -113,6 +113,8 @@ void exibir_menu(int *choice_temp) {
     printf("[7] - Recuperar dados.\n");
     printf("[0] - Sair.\n");
     scanf(" %d", choice_temp);
+    int c_main; //consumir o enter
+    while ((c_main = getchar()) != '\n' && c_main != EOF) {}
 }
 
 int alocar_memoria(Produto **produtos_temp, int *x, int **encontrar_filtro) {
@@ -208,6 +210,9 @@ void mostrar_produtos(Produto *produtos_mostrar, int y) {
     printf("[0] - Tudo\n");
     scanf(" %d", &escolha);
 
+    int c_mostrar;
+    while ((c_mostrar = getchar()) != '\n' && c_mostrar != EOF) {}
+
     switch(escolha) {
         case 1:
             for(i = 0; i < y; i++) {
@@ -254,7 +259,13 @@ int buscar_produto(Produto *produtos_buscar, int z, int *confirm_buscar) {
     int i, j, count = 0;
     int find_buscar;
     printf("Digite o nome do produto:\n");
-    scanf(" %s", &nome_buscar);
+    fgets(
+        nome_buscar, 
+        sizeof(nome_buscar),
+        stdin
+        );
+
+        nome_buscar[strcspn(nome_buscar, "\n")] = '\0';
 
     for(i = 0; i < z; i++) {
         if(strcmp((produtos_buscar+i)->dados_produto.nome, nome_buscar) == 0) {
@@ -357,11 +368,16 @@ void alterar_produtos(Produto **produtos_alterar, int m) {
     printf("[6] - Local\n");
     scanf(" %d", &choice_alterar);
 
+    int c_alterar;
+    while ((c_alterar = getchar()) != '\n' && c_alterar != EOF) {}
+
     switch(choice_alterar) {
        
         case 1:
             printf("De qual produto? (Digite o nome).\n");
             scanf(" %s", &j);
+            while ((c_alterar = getchar()) != '\n' && c_alterar != EOF) {}
+            
 
             for(i = 0; i < m; i++) {
                 if(strcmp((*produtos_alterar+i)->dados_produto.nome, j) == 0) {
@@ -375,12 +391,18 @@ void alterar_produtos(Produto **produtos_alterar, int m) {
 
             if(confirm_alterar == 0) {
                 printf("Digite o novo nome do produto: \n");
-                scanf(" %99s", (*produtos_alterar+find_alterar)->dados_produto.nome);
+                fgets(
+                    (*produtos_alterar+find_alterar)->dados_produto.nome, 
+                    sizeof(*produtos_alterar)->dados_produto.nome, 
+                    stdin
+                );
+                (*produtos_alterar+find_alterar)->dados_produto.nome[strcspn((*produtos_alterar+find_alterar)->dados_produto.nome, "\n")] = '\0';
             }
             break;
         case 2:
             printf("De qual produto? (Digite o nome).\n");
             scanf(" %s", &j);
+            while ((c_alterar = getchar()) != '\n' && c_alterar != EOF) {}
 
             for(i = 0; i < m; i++) {
                 if(strcmp((*produtos_alterar+i)->dados_produto.nome, j) == 0) {
@@ -394,12 +416,18 @@ void alterar_produtos(Produto **produtos_alterar, int m) {
 
             if(confirm_alterar == 0) {
                 printf("Digite a nova categoria do produto: \n");
-                scanf(" %99s", (*produtos_alterar+find_alterar)->dados_loja.categoria);
+                fgets(
+                    (*produtos_alterar+find_alterar)->dados_loja.categoria, 
+                    sizeof(*produtos_alterar)->dados_loja.categoria, 
+                    stdin
+                );
+                (*produtos_alterar+find_alterar)->dados_loja.categoria[strcspn((*produtos_alterar+find_alterar)->dados_loja.categoria, "\n")] = '\0';
             }
             break;
         case 3: 
             printf("De qual produto? (Digite o nome).\n");
             scanf(" %s", &j);
+            while ((c_alterar = getchar()) != '\n' && c_alterar != EOF) {}
 
             for(i = 0; i < m; i++) {
                 if(strcmp((*produtos_alterar+i)->dados_produto.nome, j) == 0) {
@@ -413,12 +441,18 @@ void alterar_produtos(Produto **produtos_alterar, int m) {
 
             if(confirm_alterar == 0) {
                 printf("Digite a nova descricao do produto: \n");
-                scanf(" %99s", (*produtos_alterar+find_alterar)->dados_produto.descricao);
+                fgets(
+                    (*produtos_alterar+find_alterar)->dados_produto.descricao, 
+                    sizeof(*produtos_alterar)->dados_produto.descricao, 
+                    stdin
+                );
+                (*produtos_alterar+find_alterar)->dados_produto.descricao[strcspn((*produtos_alterar+find_alterar)->dados_produto.descricao, "\n")] = '\0';
             }
             break;
         case 4:
             printf("De qual produto? (Digite o nome).\n");
             scanf(" %s", &j);
+            while ((c_alterar = getchar()) != '\n' && c_alterar != EOF) {}
 
             for(i = 0; i < m; i++) {
                 if(strcmp((*produtos_alterar+i)->dados_produto.nome, j) == 0) {
@@ -433,11 +467,13 @@ void alterar_produtos(Produto **produtos_alterar, int m) {
             if(confirm_alterar == 0) {
                 printf("Digite o novo estoque do produto: \n");
                 scanf(" %d", &(*produtos_alterar+find_alterar)->dados_loja);
+                while ((c_alterar = getchar()) != '\n' && c_alterar != EOF) {}
             }
             break;
         case 5:
             printf("De qual produto? (Digite o nome).\n");
             scanf(" %s", &j);
+            while ((c_alterar = getchar()) != '\n' && c_alterar != EOF) {}
 
             for(i = 0; i < m; i++) {
                 if(strcmp((*produtos_alterar+i)->dados_produto.nome, j) == 0) {
@@ -451,12 +487,18 @@ void alterar_produtos(Produto **produtos_alterar, int m) {
 
             if(confirm_alterar == 0) {
                 printf("Digite a nova marca do produto: \n");
-                scanf(" %99s", (*produtos_alterar+find_alterar)->dados_produto.marca);
+                fgets(
+                    (*produtos_alterar+find_alterar)->dados_produto.marca, 
+                    sizeof(*produtos_alterar)->dados_produto.marca, 
+                    stdin
+                );
+                (*produtos_alterar+find_alterar)->dados_produto.marca[strcspn((*produtos_alterar+find_alterar)->dados_produto.marca, "\n")] = '\0';
             }
             break;
         case 6:
             printf("De qual produto? (Digite o nome).\n");
             scanf(" %s", &j);
+            while ((c_alterar = getchar()) != '\n' && c_alterar != EOF) {}
 
             for(i = 0; i < m; i++) {
                 if(strcmp((*produtos_alterar+i)->dados_produto.nome, j) == 0) {
@@ -470,7 +512,12 @@ void alterar_produtos(Produto **produtos_alterar, int m) {
 
             if(confirm_alterar == 0) {
                 printf("Digite o novo local do produto: \n");
-                scanf(" %99s", (*produtos_alterar+find_alterar)->dados_loja.local);
+                fgets(
+                    (*produtos_alterar+find_alterar)->dados_loja.local, 
+                    sizeof(*produtos_alterar)->dados_loja.local, 
+                    stdin
+                );
+                (*produtos_alterar+find_alterar)->dados_loja.local[strcspn((*produtos_alterar+find_alterar)->dados_loja.local, "\n")] = '\0';
             }
             break;
             
