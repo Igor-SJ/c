@@ -31,6 +31,7 @@ void print_tudo(Produto *produtos_print, int p); //
 void find_verificar(Produto *produto_verificar, int *confirm_verificar, int count_verificar);
 void salvar(Produto *produto_salvar, int *s);
 void recuperar(Produto **produto_recuperar, int *r);
+int if_cadastro(Produto *produto_if);
 
 int main() {
     Produto *produtos = NULL;
@@ -47,16 +48,22 @@ int main() {
                 alocar_result = alocar_memoria(&produtos, &n, &find_filtro);
 
                 if(alocar_result == 1) {
-                    return 1;
+                    break;
                 }
                 alocar_produtos(produtos, &n);
                 break;
 
             case 2:
+                if(if_cadastro(produtos) == 1) {
+                    break;
+                }
                 mostrar_produtos(produtos, n);
                 break;
 
             case 3:
+                if(if_cadastro(produtos) == 1) {
+                    break;
+                }
                 find_main = buscar_produto(produtos, n, &confirm);
                 if(confirm == 0) {
                     int find_main_print = find_main;
@@ -65,6 +72,9 @@ int main() {
                 confirm = 0;
                 break;
             case 4: 
+                if(if_cadastro(produtos) == 1) {
+                    break;
+                }
                 free(find_filtro);
                 find_filtro = filtrar_produtos(produtos, n, &confirm);
                 int find_filtro_print = *find_filtro;
@@ -74,17 +84,25 @@ int main() {
                         if(find_filtro[i] != 0)
                             print_tudo(produtos, i); 
                     }       
-                }
+                } else printf("Tente novamente.\n\n");
                 confirm = 0;
                 break;
             case 5:
+                if(if_cadastro(produtos) == 1) {
+                    break;
+                }
                 alterar_produtos(&produtos, n);
                 break;
             case 6:
+                if(if_cadastro(produtos) == 1) {
+                    break;
+                }
                 salvar(produtos, &n);
                 break;
             case 7:
                 recuperar(&produtos, &n);
+                break;
+            case 0:
                 break;
             default:
                 printf("Opcao invalida.\n");
@@ -103,7 +121,7 @@ int main() {
 }
 
 void exibir_menu(int *choice_temp) {
-    printf("\n\n\nBEM VINDO!\n\n\n==============================\nSelecione uma opcao.\n");
+    printf("BEM VINDO!\n==============================\nSelecione uma opcao.\n");
     printf("[1] - Catalogar produtos.\n");
     printf("[2] - Exibir informacao\n"); //dentro daqui, colocar opcao de filtros
     printf("[3] - Buscar.\n"); //eventualmente, posso juntar 1 com 2, e 3 com 4, ou mais
@@ -207,7 +225,7 @@ void mostrar_produtos(Produto *produtos_mostrar, int y) {
     printf("[3] - Estoque\n");
     printf("[4] - Marca\n");
     printf("[5] - Local\n");
-    printf("[0] - Tudo\n");
+    printf("[0] - Tudo\n\n");
     scanf(" %d", &escolha);
 
     int c_mostrar;
@@ -217,31 +235,31 @@ void mostrar_produtos(Produto *produtos_mostrar, int y) {
         case 1:
             for(i = 0; i < y; i++) {
                 printf("Nome: %s.\n", (produtos_mostrar+i)->dados_produto.nome);
-                printf("Categoria: %s.\n", (produtos_mostrar+i)->dados_loja.categoria);
+                printf("Categoria: %s.\n\n", (produtos_mostrar+i)->dados_loja.categoria);
             }
             break;
         case 2:
             for(i = 0; i < y; i++) {
                 printf("Nome: %s.\n", (produtos_mostrar+i)->dados_produto.nome);
-                printf("Descricao: %s.\n", (produtos_mostrar+i)->dados_produto.descricao);
+                printf("Descricao: %s.\n\n", (produtos_mostrar+i)->dados_produto.descricao);
             }
             break;  
         case 3:
             for(i = 0; i < y; i++) {
                 printf("Nome: %s.\n", (produtos_mostrar+i)->dados_produto.nome);
-                printf("Estoque: %d.\n", (produtos_mostrar+i)->dados_loja.estoque);
+                printf("Estoque: %d.\n\n", (produtos_mostrar+i)->dados_loja.estoque);
             }
             break;  
         case 4:
             for(i = 0; i < y; i++) {
                 printf("Nome: %s.\n", (produtos_mostrar+i)->dados_produto.nome);
-                printf("Marca: %s.\n", (produtos_mostrar+i)->dados_produto.marca);
+                printf("Marca: %s.\n\n", (produtos_mostrar+i)->dados_produto.marca);
             }
             break;
         case 5:
             for(i = 0; i < y; i++) {
                 printf("Nome: %s.\n", (produtos_mostrar+i)->dados_produto.nome);
-                printf("Local: %s.\n", (produtos_mostrar+i)->dados_loja.local);
+                printf("Local: %s.\n\n", (produtos_mostrar+i)->dados_loja.local);
             }
             break;     
         case 0:
@@ -281,19 +299,18 @@ int buscar_produto(Produto *produtos_buscar, int z, int *confirm_buscar) {
 int *filtrar_produtos(Produto *produtos_filtrar, int w, int *confirm_filtrar) {
     char filtro_buscar[50];
     int i, choice_filtro = 0;
+    int *find_filtrar = calloc((size_t)w, sizeof(int));
 
     *confirm_filtrar = 1;
 
     if (w <= 0 || produtos_filtrar == NULL) {
         printf("Nenhum produto cadastrado.\n");
-        return NULL; //colocar mais coisas como essa em outras funções
+        return find_filtrar;
     }
-
-    int *find_filtrar = calloc((size_t)w, sizeof(int));
 
     if (find_filtrar == NULL) {
         printf("Erro na alocacao de memoria.\n");
-        return NULL;
+        return find_filtrar;
     }
 
     printf("Por qual fator voce deseja filtrar?\n");
@@ -313,13 +330,13 @@ int *filtrar_produtos(Produto *produtos_filtrar, int w, int *confirm_filtrar) {
 
     switch (choice_filtro) {
         case 1:
-            printf("Digite a categoria:\n");
+            printf("Digite a categoria:\n\n");
             break;
         case 2:
-            printf("Digite a marca:\n");
+            printf("Digite a marca:\n\n");
             break;
         case 3:
-            printf("Digite o local:\n");
+            printf("Digite o local:\n\n");
             break;//depois tenho que fazer esse negocio do switch duplo
     }
 
@@ -542,7 +559,7 @@ void print_tudo(Produto *produtos_print, int p) {
         printf("Descricao: %s.\n", (produtos_print+p)->dados_produto.descricao);
         printf("Estoque: %d.\n", (produtos_print+p)->dados_loja.estoque);
         printf("Marca: %s.\n", (produtos_print+p)->dados_produto.marca);
-        printf("Local: %s.\n", (produtos_print+p)->dados_loja.local);
+        printf("Local: %s.\n\n", (produtos_print+p)->dados_loja.local);
 }
 
 void find_verificar(Produto *produto_verificar, int *confirm_verificar, int count_verificar) {
@@ -605,10 +622,15 @@ void recuperar(Produto **produto_recuperar, int *r) {
 
     *produto_recuperar = temp_recuperar;
 
-    printf("Ta quase la...");
-
     fread(*produto_recuperar, sizeof(Produto), *r, arquivo);
 
-    printf("Salvamento recuperado com sucesso.\n");
+    printf("Salvamento recuperado com sucesso.\n\n");
     fclose(arquivo);
+}
+
+int if_cadastro(Produto *produto_if) {
+    if(produto_if == NULL) {
+        printf("Nenhum produto cadastrado.\n\n");
+        return 1;
+    }
 }
