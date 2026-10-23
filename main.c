@@ -337,7 +337,7 @@ int *filtrar_produtos(Produto *produtos_filtrar, int w, int *confirm_filtrar) {
             break;
         case 3:
             printf("Digite o local:\n\n");
-            break;//depois tenho que fazer esse negocio do switch duplo
+            break;
     }
 
     fgets(
@@ -394,10 +394,7 @@ void alterar_produtos(Produto **produtos_alterar, int m) {
     int c_alterar;
     while ((c_alterar = getchar()) != '\n' && c_alterar != EOF) {}
 
-    switch(choice_alterar) {
-       
-        case 1:
-            printf("De qual produto? (Digite o nome).\n");
+    printf("De qual produto? (Digite o nome).\n");
             
             fgets(
                 buscar_alterar, 
@@ -415,6 +412,10 @@ void alterar_produtos(Produto **produtos_alterar, int m) {
                     find_alterar = i;
                 }
             }
+
+    switch(choice_alterar) {
+       
+        case 1:
             
             find_verificar(*produtos_alterar, &confirm_alterar, count_alterar);
 
@@ -429,18 +430,6 @@ void alterar_produtos(Produto **produtos_alterar, int m) {
             }
             break;
         case 2:
-            printf("De qual produto? (Digite o nome).\n");
-            scanf(" %s", &buscar_alterar);
-            while ((c_alterar = getchar()) != '\n' && c_alterar != EOF) {}
-
-            for(i = 0; i < m; i++) {
-                if(strcmp((*produtos_alterar+i)->dados_produto.nome, buscar_alterar) == 0) {
-                    count_alterar++;
-                    strcpy(buscar_alterar, (*produtos_alterar+i)->dados_produto.nome);
-                    find_alterar = i;
-                }
-            }
-
             find_verificar(*produtos_alterar, &confirm_alterar, count_alterar);
 
             if(confirm_alterar == 0) {
@@ -454,17 +443,6 @@ void alterar_produtos(Produto **produtos_alterar, int m) {
             }
             break;
         case 3: 
-            printf("De qual produto? (Digite o nome).\n");
-            scanf(" %s", &buscar_alterar);
-            while ((c_alterar = getchar()) != '\n' && c_alterar != EOF) {}
-
-            for(i = 0; i < m; i++) {
-                if(strcmp((*produtos_alterar+i)->dados_produto.nome, buscar_alterar) == 0) {
-                    count_alterar++;
-                    strcpy(buscar_alterar, (*produtos_alterar+i)->dados_produto.nome);
-                    find_alterar = i;
-                }
-            }
             
             find_verificar(*produtos_alterar, &confirm_alterar, count_alterar);
 
@@ -479,38 +457,16 @@ void alterar_produtos(Produto **produtos_alterar, int m) {
             }
             break;
         case 4:
-            printf("De qual produto? (Digite o nome).\n");
-            scanf(" %s", &buscar_alterar);
-            while ((c_alterar = getchar()) != '\n' && c_alterar != EOF) {}
-
-            for(i = 0; i < m; i++) {
-                if(strcmp((*produtos_alterar+i)->dados_produto.nome, buscar_alterar) == 0) {
-                    count_alterar++;
-                    strcpy(buscar_alterar, (*produtos_alterar+i)->dados_produto.nome);
-                    find_alterar = i;
-                }
-            }
 
             find_verificar(*produtos_alterar, &confirm_alterar, count_alterar);
 
             if(confirm_alterar == 0) {
                 printf("Digite o novo estoque do produto: \n");
-                scanf(" %d", &(*produtos_alterar+find_alterar)->dados_loja);
+                scanf(" %d", &(*produtos_alterar+find_alterar)->dados_loja.estoque);
                 while ((c_alterar = getchar()) != '\n' && c_alterar != EOF) {}
             }
             break;
         case 5:
-            printf("De qual produto? (Digite o nome).\n");
-            scanf(" %s", &buscar_alterar);
-            while ((c_alterar = getchar()) != '\n' && c_alterar != EOF) {}
-
-            for(i = 0; i < m; i++) {
-                if(strcmp((*produtos_alterar+i)->dados_produto.nome, buscar_alterar) == 0) {
-                    count_alterar++;
-                    strcpy(buscar_alterar, (*produtos_alterar+i)->dados_produto.nome);
-                    find_alterar = i;
-                }
-            }
 
             find_verificar(*produtos_alterar, &confirm_alterar, count_alterar);
 
@@ -525,17 +481,6 @@ void alterar_produtos(Produto **produtos_alterar, int m) {
             }
             break;
         case 6:
-            printf("De qual produto? (Digite o nome).\n");
-            scanf(" %s", &buscar_alterar);
-            while ((c_alterar = getchar()) != '\n' && c_alterar != EOF) {}
-
-            for(i = 0; i < m; i++) {
-                if(strcmp((*produtos_alterar+i)->dados_produto.nome, buscar_alterar) == 0) {
-                    count_alterar++;
-                    strcpy(buscar_alterar, (*produtos_alterar+i)->dados_produto.nome);
-                    find_alterar = i;
-                }
-            }
 
             find_verificar(*produtos_alterar, &confirm_alterar, count_alterar);
 
