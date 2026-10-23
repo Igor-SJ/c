@@ -364,7 +364,7 @@ int *filtrar_produtos(Produto *produtos_filtrar, int w, int *confirm_filtrar) {
 
 void alterar_produtos(Produto **produtos_alterar, int m) {
     int choice_alterar, confirm_alterar, i, count_alterar = 0, find_alterar;
-    char j[50];
+    char buscar_alterar[50];
     printf("Qual dado você deseja alterar?\n");
     printf("[1] - Nome\n");
     printf("[2] - Categoria\n");
@@ -381,14 +381,20 @@ void alterar_produtos(Produto **produtos_alterar, int m) {
        
         case 1:
             printf("De qual produto? (Digite o nome).\n");
-            scanf(" %s", &j);
-            while ((c_alterar = getchar()) != '\n' && c_alterar != EOF) {}
+            
+            fgets(
+                buscar_alterar, 
+                sizeof(buscar_alterar),
+                stdin
+                );
+
+            buscar_alterar[strcspn(buscar_alterar, "\n")] = '\0';
             
 
             for(i = 0; i < m; i++) {
-                if(strcmp((*produtos_alterar+i)->dados_produto.nome, j) == 0) {
+                if(strcmp((*produtos_alterar+i)->dados_produto.nome, buscar_alterar) == 0) {
                     count_alterar++;
-                    strcpy(j, (*produtos_alterar+i)->dados_produto.nome);
+                    strcpy(buscar_alterar, (*produtos_alterar+i)->dados_produto.nome);
                     find_alterar = i;
                 }
             }
@@ -407,13 +413,13 @@ void alterar_produtos(Produto **produtos_alterar, int m) {
             break;
         case 2:
             printf("De qual produto? (Digite o nome).\n");
-            scanf(" %s", &j);
+            scanf(" %s", &buscar_alterar);
             while ((c_alterar = getchar()) != '\n' && c_alterar != EOF) {}
 
             for(i = 0; i < m; i++) {
-                if(strcmp((*produtos_alterar+i)->dados_produto.nome, j) == 0) {
+                if(strcmp((*produtos_alterar+i)->dados_produto.nome, buscar_alterar) == 0) {
                     count_alterar++;
-                    strcpy(j, (*produtos_alterar+i)->dados_produto.nome);
+                    strcpy(buscar_alterar, (*produtos_alterar+i)->dados_produto.nome);
                     find_alterar = i;
                 }
             }
@@ -432,13 +438,13 @@ void alterar_produtos(Produto **produtos_alterar, int m) {
             break;
         case 3: 
             printf("De qual produto? (Digite o nome).\n");
-            scanf(" %s", &j);
+            scanf(" %s", &buscar_alterar);
             while ((c_alterar = getchar()) != '\n' && c_alterar != EOF) {}
 
             for(i = 0; i < m; i++) {
-                if(strcmp((*produtos_alterar+i)->dados_produto.nome, j) == 0) {
+                if(strcmp((*produtos_alterar+i)->dados_produto.nome, buscar_alterar) == 0) {
                     count_alterar++;
-                    strcpy(j, (*produtos_alterar+i)->dados_produto.nome);
+                    strcpy(buscar_alterar, (*produtos_alterar+i)->dados_produto.nome);
                     find_alterar = i;
                 }
             }
@@ -457,13 +463,13 @@ void alterar_produtos(Produto **produtos_alterar, int m) {
             break;
         case 4:
             printf("De qual produto? (Digite o nome).\n");
-            scanf(" %s", &j);
+            scanf(" %s", &buscar_alterar);
             while ((c_alterar = getchar()) != '\n' && c_alterar != EOF) {}
 
             for(i = 0; i < m; i++) {
-                if(strcmp((*produtos_alterar+i)->dados_produto.nome, j) == 0) {
+                if(strcmp((*produtos_alterar+i)->dados_produto.nome, buscar_alterar) == 0) {
                     count_alterar++;
-                    strcpy(j, (*produtos_alterar+i)->dados_produto.nome);
+                    strcpy(buscar_alterar, (*produtos_alterar+i)->dados_produto.nome);
                     find_alterar = i;
                 }
             }
@@ -478,13 +484,13 @@ void alterar_produtos(Produto **produtos_alterar, int m) {
             break;
         case 5:
             printf("De qual produto? (Digite o nome).\n");
-            scanf(" %s", &j);
+            scanf(" %s", &buscar_alterar);
             while ((c_alterar = getchar()) != '\n' && c_alterar != EOF) {}
 
             for(i = 0; i < m; i++) {
-                if(strcmp((*produtos_alterar+i)->dados_produto.nome, j) == 0) {
+                if(strcmp((*produtos_alterar+i)->dados_produto.nome, buscar_alterar) == 0) {
                     count_alterar++;
-                    strcpy(j, (*produtos_alterar+i)->dados_produto.nome);
+                    strcpy(buscar_alterar, (*produtos_alterar+i)->dados_produto.nome);
                     find_alterar = i;
                 }
             }
@@ -503,13 +509,13 @@ void alterar_produtos(Produto **produtos_alterar, int m) {
             break;
         case 6:
             printf("De qual produto? (Digite o nome).\n");
-            scanf(" %s", &j);
+            scanf(" %s", &buscar_alterar);
             while ((c_alterar = getchar()) != '\n' && c_alterar != EOF) {}
 
             for(i = 0; i < m; i++) {
-                if(strcmp((*produtos_alterar+i)->dados_produto.nome, j) == 0) {
+                if(strcmp((*produtos_alterar+i)->dados_produto.nome, buscar_alterar) == 0) {
                     count_alterar++;
-                    strcpy(j, (*produtos_alterar+i)->dados_produto.nome);
+                    strcpy(buscar_alterar, (*produtos_alterar+i)->dados_produto.nome);
                     find_alterar = i;
                 }
             }
