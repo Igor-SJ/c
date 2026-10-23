@@ -31,12 +31,8 @@ void find_verificar(Produto *produto_verificar, int *confirm_verificar, int coun
 void salvar(Produto *produto_salvar, int *s);
 void recuperar(Produto **produto_recuperar, int *r);
 
-FILE *arquivo;
-
 int main() {
     Produto *produtos = NULL;
-
-    arquivo = fopen("arquivo.dat", "rb");
 
     int n = 0, i, choice = 10, choice_ind = 0, confirm = 0, find_main, *find_filtro = NULL, alocar_result;
 
@@ -89,13 +85,14 @@ int main() {
             case 7:
                 recuperar(&produtos, &n);
                 break;
+            default:
+                printf("Opcao invalida.\n");
         }
 
     } while(choice != 0);
 
     free(produtos);
     free(find_filtro);
-    fclose(arquivo);
 
     printf("Memoria liberada com sucesso.\n");
 
@@ -105,15 +102,15 @@ int main() {
 }
 
 void exibir_menu(int *choice_temp) {
-    printf("BEM VINDO!\n==============================\nSelecione uma opcao.\n");
+    printf("\n\n\nBEM VINDO!\n\n\n==============================\nSelecione uma opcao.\n");
     printf("[1] - Catalogar produtos.\n");
     printf("[2] - Exibir informacao\n"); //dentro daqui, colocar opcao de filtros
     printf("[3] - Buscar.\n"); //eventualmente, posso juntar 1 com 2, e 3 com 4, ou mais
     printf("[4] - Filtrar.\n");
     printf("[5] - Alterar dados individuais.\n");
-    printf("[6] - Salvar dados.");
-    printf("[7] - Recuperar dados.");
-    printf("[0] - Sair.\n\n");
+    printf("[6] - Salvar dados.\n");
+    printf("[7] - Recuperar dados.\n");
+    printf("[0] - Sair.\n");
     scanf(" %d", choice_temp);
 }
 
@@ -121,6 +118,9 @@ int alocar_memoria(Produto **produtos_temp, int *x, int **encontrar_filtro) {
 
     printf("Quantos produtos voce quer alocar?\n");
     scanf(" %d", x);
+
+    int c; //consumir o enter
+    while ((c = getchar()) != '\n' && c != EOF) {}
 
     Produto *temp = realloc(*produtos_temp,(size_t) *x * sizeof(Produto));
     int *temp2 = realloc(*encontrar_filtro,(size_t) *x * sizeof(int));
@@ -146,32 +146,57 @@ void alocar_produtos(Produto *produtos_aloc, int *j) {
     int i;
     for(i = 0; i < *j; i++) {
         printf("Categoria do produto %d: \n", i+1);
-        scanf(" %49s", produtos_aloc[i].categoria.nome_cat);
-
+        fgets(
+            produtos_aloc[i].categoria.nome_cat, 
+            sizeof(produtos_aloc[i].categoria.nome_cat), 
+            stdin
+        );
+        produtos_aloc[i].categoria.nome_cat[strcspn(produtos_aloc[i].categoria.nome_cat, "\n")] = '\0';
+        //gasta o enter
 
         printf("Nome do produto %d: \n", i+1);
-        scanf(" %99s", produtos_aloc[i].nome);
-        
-
+        fgets(
+            produtos_aloc[i].nome, 
+            sizeof(produtos_aloc[i].nome), 
+            stdin
+        );
+        produtos_aloc[i].nome[strcspn(produtos_aloc[i].nome, "\n")] = '\0';
+    
         printf("Descricao do produto %d: \n", i+1);
-        scanf(" %299s", produtos_aloc[i].descricao);
+        fgets(
+            produtos_aloc[i].descricao, 
+            sizeof(produtos_aloc[i].descricao), 
+            stdin
+        );
+        produtos_aloc[i].descricao[strcspn(produtos_aloc[i].descricao, "\n")] = '\0';
         
 
         printf("Estoque total do produto %d: \n", i+1);
         scanf(" %d", &produtos_aloc[i].estoque);
+        int c_produtos; //consumir o enter
+        while ((c_produtos = getchar()) != '\n' && c_produtos != EOF) {}
 
         printf("Marca do produto %d: \n", i+1);
-        scanf(" %49s", produtos_aloc[i].marca);
-    
+        fgets(
+            produtos_aloc[i].marca, 
+            sizeof(produtos_aloc[i].marca), 
+            stdin
+        );
+        produtos_aloc[i].marca[strcspn(produtos_aloc[i].marca, "\n")] = '\0';
 
         printf("Peso do produto %d: \n", i+1);
         scanf(" %f", &produtos_aloc[i].peso);
+        while ((c_produtos = getchar()) != '\n' && c_produtos != EOF) {}
 
 
         printf("Local do produto %d: \n", i+1);
-        scanf(" %49s", produtos_aloc[i].local);
+        fgets(
+            produtos_aloc[i].local, 
+            sizeof(produtos_aloc[i].local), 
+            stdin
+        );
+        produtos_aloc[i].local[strcspn(produtos_aloc[i].local, "\n")] = '\0';
         
-
     }
 }
 
@@ -509,34 +534,39 @@ void find_verificar(Produto *produto_verificar, int *confirm_verificar, int coun
 }
 
 void salvar(Produto *produto_salvar, int *s) {
-    arquivo = fopen("arquivo.dat", "wb");
+    FILE *arquivo = fopen("arquivo.dat", "wb");
     if(arquivo == NULL) {
         printf("Falha.\n");
         return;
     }
+    fseek(arquivo, 0, SEEK_SET);
 
     fwrite(s, sizeof(int), 1, arquivo);
     fwrite(produto_salvar, sizeof(Produto), *s, arquivo);
+
+    printf("Salvamento realizado com sucesso.\n");
+    fclose(arquivo);
 }
 
 void recuperar(Produto **produto_recuperar, int *r) {
+    FILE *arquivo = fopen("arquivo.dat", "rb");
     if(arquivo == NULL) {
         printf("Falha.\n");
         return;    
     }
 
+    fseek(arquivo, 0, SEEK_SET);
     fread(r, sizeof(int), 1, arquivo);
+    long tamanho_recuperar = ftell(arquivo);
 
-    printf(" %d", *r);
+    if(tamanho_recuperar != -1L) {
+        printf("Foram detectados %ld bytes de memoria.\n", tamanho_recuperar);
+        printf("Isso equivale a %d produtos.\n", tamanho_recuperar/sizeof(Produto));
+    }
 
-
-    printf("Depois do 7");
 
     Produto *temp_recuperar; 
-    printf("basdfasdfdsa");
     temp_recuperar = malloc((size_t) (*r) * sizeof(Produto));
-
-    printf("aqui~");
 
 
     if (temp_recuperar == NULL && *r > 0) {
@@ -544,12 +574,12 @@ void recuperar(Produto **produto_recuperar, int *r) {
         return;
     }
 
-
     *produto_recuperar = temp_recuperar;
 
     printf("Ta quase la...");
 
     fread(*produto_recuperar, sizeof(Produto), *r, arquivo);
 
-    free(temp_recuperar);
+    printf("Salvamento recuperado com sucesso.\n");
+    fclose(arquivo);
 }
