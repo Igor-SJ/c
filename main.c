@@ -308,6 +308,9 @@ int *filtrar_produtos(Produto *produtos_filtrar, int w, int *confirm_filtrar) {
         return NULL;
     }
 
+    int c_filtrar;
+    while ((c_filtrar = getchar()) != '\n' && c_filtrar != EOF) {}
+
     switch (choice_filtro) {
         case 1:
             printf("Digite a categoria:\n");
@@ -317,13 +320,16 @@ int *filtrar_produtos(Produto *produtos_filtrar, int w, int *confirm_filtrar) {
             break;
         case 3:
             printf("Digite o local:\n");
-            break;
+            break;//depois tenho que fazer esse negocio do switch duplo
     }
 
-    if (scanf("%49s", filtro_buscar) != 1) {
-        free(find_filtrar);
-        return NULL;
-    }
+    fgets(
+        filtro_buscar, 
+        sizeof(filtro_buscar),
+        stdin
+        );
+
+        filtro_buscar[strcspn(filtro_buscar, "\n")] = '\0';
 
     for (i = 0; i < w; i++) {
         int corresponde = 0;
@@ -363,7 +369,7 @@ void alterar_produtos(Produto **produtos_alterar, int m) {
     printf("[1] - Nome\n");
     printf("[2] - Categoria\n");
     printf("[3] - Descricao\n");
-    printf("[4] - Estoque\n"); //falta finalizar esta parte
+    printf("[4] - Estoque\n");
     printf("[5] - Marca\n");
     printf("[6] - Local\n");
     scanf(" %d", &choice_alterar);
